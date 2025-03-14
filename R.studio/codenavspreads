@@ -1,1 +1,66 @@
+install.packages("readxl")
+# Charger le package
+library(readxl)
+
+# Définir le chemin d'accès du fichier Excel
+file_path <- "C:/Users/Tom-O/OneDrive/Desktop/Workshop/Data.xlsx"
+
+# Charger les données à partir de la première feuille du fichier Excel
+df <- read_excel(file_path)
+
+# Afficher les premières lignes pour vérifier
+head(df)
+# Charger une feuille spécifique du fichier Excel
+df_NAVss <- read_excel(file_path, sheet = "NAVss")
+
+# Afficher les premières lignes
+head(df_NAVss)
+
+# Charger une feuille spécifique du fichier Excel
+df_spreads <- read_excel(file_path, sheet = "Fidelity spreads Value")
+
+install.packages("readxl")
+install.packages("dplyr")
+
+library(readxl)
+library(dplyr)
+
+# Définir le chemin du fichier Excel
+file_path <- "C:/Users/Tom-O/OneDrive/Desktop/Workshop/Data.xlsx"
+
+# Lire la feuille contenant les NAV (en sautant les 2 premières lignes inutiles)
+df <- read_excel(file_path, sheet = "NomDeLaFeuille", skip = 2)
+
+# Vérifier l'importation
+head(df)
+
+# Définir le chemin du fichier
+file_path <- "C:/Users/Tom-O/OneDrive/Desktop/Workshop/Data.xlsx"
+
+# Charger la feuille Fidelity Spreads Value
+df_spreads <- read_excel(file_path, sheet = "Fidelity Spreads Value", skip = 1)
+
+# Afficher les premières lignes
+head(df_spreads)
+
+# Afficher les noms de colonnes
+colnames(df_spreads)
+
+# Si besoin, corriger les noms de colonnes
+colnames(df_spreads) <- make.names(colnames(df_spreads), unique = TRUE)
+# Convertir la première colonne en format Date
+df_spreads[[1]] <- as.Date(df_spreads[[1]], format="%m/%d/%y")
+
+install.packages("dplyr")  # À exécuter une seule fois si dplyr n'est pas installé
+library(dplyr)  # Charger dplyr pour utiliser %>%
+df_navs <- df_navs %>% arrange(Date)
+
+# Calcul du rendement entre deux périodes
+df_navs <- df_navs %>% arrange(Date)  # S'assurer que les données sont triées par date
+
+df_navs <- df_navs %>%
+  mutate(Return = (NAV - lag(NAV)) / lag(NAV))  # Calcul du rendement quotidien
+
+# Vérifier les premiers résultats
+head(df_navs)
 
